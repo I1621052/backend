@@ -58,6 +58,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
         usuario.nombre = body.nombre;
         usuario.apellidos = body.apellidos;
         usuario.email = body.email;
+        usuario.img = body.img;
         usuario.rol = body.rol;
 
         usuario.save((err, usuarioGuardado) => {

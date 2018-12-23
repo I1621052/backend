@@ -63,6 +63,7 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
         reserva.dni = body.dni;
         reserva.nombre = body.nombre;
         reserva.apellidos = body.apellidos;
+        reserva.numero = body.numero;
         reserva.fechainicio = body.fechainicio;
         reserva.fechafin = body.fechafin;
         reserva.precio = body.precio;
@@ -96,6 +97,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         dni: body.dni,
         nombre: body.nombre,
         apellidos: body.apellidos,
+        numero: body.numero,
         fechainicio: body.fechainicio,
         fechafin: body.fechafin,
         precio: body.precio,

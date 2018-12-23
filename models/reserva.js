@@ -4,6 +4,7 @@ var reservaSchema = new Schema({
     dni: { type: Number, required: [true, 'El dni es necesario'] },
     nombre: { type: String, required: [true, 'El nombre es necesario'] },
     apellidos: { type: String, required: [true, 'El apellido es necesario'] },
+    numero: { type: Number, required: [true, 'El numero es necesario'] },
     fechainicio: { type: Date, required: [true, 'La fecha inicio es necesario'] },
     fechafin: { type: Date, required: [true, 'La fecha fin es necesario'] },
     precio: { type: Number, required: [true, 'El precios es obligatorio'] },

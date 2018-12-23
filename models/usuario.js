@@ -13,11 +13,11 @@ var usuarioSchema = new Schema({
     apellidos: { type: String },
     email: { type: String, unique: true, required: [true, 'El correo es necesario'] },
     password: { type: String, required: [true, 'La contraseña es necesario'] },
-    rol: { type: String, required: true, uppercase: true, default: 'USER_ROLE', enum: rolesValidos },
+    img: { type: String, required: false },
+    ol: { type: String, required: true, uppercase: true, default: 'USER_ROLE', enum: rolesValidos },
     google: { type: Boolean, default: false }
 
 });
 
 usuarioSchema.plugin(uniqueValidator, { message: 'el correo debe ser unico' });
-
 module.exports = mongoose.model('Usuario', usuarioSchema);
