@@ -4,129 +4,145 @@ var jwt = require('jsonwebtoken');
 var mdAutenticacion = require('../middlewares/autenticacion')
 
 var app = express();
-var Habitacion = require('../models/habitacion');
+var Reserva = require('../models/reserva');
 
 //--------------------------------------------------------
-//Obtener todos los habitaciones
+//Obtener todos los reservas
 //--------------------------------------------------------
 app.get('/', (req, res, next) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
-    Habitacion.find({}, )
+    Reserva.find({}, )
         .skip(desde)
         .limit(5)
-        .populate('categoria', 'nombre detalles')
+        .populate('usuario', 'nombre apellidos email')
+        .populate('habitacion', 'numero piso')
+        .populate('servicio', 'nombre detalles precios')
         .exec(
-            (err, habitaciones) => {
+            (err, reservas) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
-                        mesanje: 'Error GET de habitaciones!',
+                        mesanje: 'Error GET de reservas!',
                         errors: err
                     });
                 }
                 res.status(200).json({
                     ok: true,
-                    habitaciones
+                    reservas
                 });
             });
 });
 
 //--------------------------------------------------------
-//Actualizar habitacion
+//Actualizar reserva
 //--------------------------------------------------------
 
 app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
-    Habitacion.findById(id, (err, habitacion) => {
+    Reserva.findById(id, (err, reserva) => {
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mesanje: 'Error al buscar habitacion',
+                mesanje: 'Error al buscar reserva',
                 errors: err
             });
         }
 
-        if (!habitacion) {
+        if (!reserva) {
             return res.status(400).json({
                 ok: false,
-                mesanje: 'El habitacion con el id' + id + ' no existe',
-                errors: { message: 'No existe un habitacion con ese ID' }
+                mesanje: 'El reserva con el id' + id + ' no existe',
+                errors: { message: 'No existe un reserva con ese ID' }
             });
         }
 
-        habitacion.numero = body.numero;
-        habitacion.piso = body.piso;
-        habitacion.categoria = body.categoria
+        reserva.dni = body.dni;
+        reserva.nombre = body.nombre;
+        reserva.apellidos = body.apellidos;
+        reserva.fechainicio = body.fechainicio;
+        reserva.fechafin = body.fechafin;
+        reserva.precio = body.precio;
+        reserva.total = body.total;
+        reserva.usuario = body.usuario;
+        reserva.habitacion = body.habitacion;
+        reserva.servicio = body.servicio;
 
-        habitacion.save((err, habitacionGuardado) => {
+        reserva.save((err, reservaGuardado) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
-                    mesanje: 'Error al actualizar habitacion',
+                    mesanje: 'Error al actualizar reserva',
                     errors: err
                 });
             }
             res.status(200).json({
                 ok: true,
-                habitacion: habitacionGuardado
+                reserva: reservaGuardado
             });
         });
     });
 });
 
 //--------------------------------------------------------
-//Crear un nuevo habitacion
+//Crear un nuevo reserva
 //--------------------------------------------------------
 app.post('/', mdAutenticacion.verificaToken, (req, res) => {
     var body = req.body;
-    var habitacion = new Habitacion({
-        numero: body.numero,
-        piso: body.piso,
-        categoria: body.categoria
+    var reserva = new Reserva({
+        dni: body.dni,
+        nombre: body.nombre,
+        apellidos: body.apellidos,
+        fechainicio: body.fechainicio,
+        fechafin: body.fechafin,
+        precio: body.precio,
+        total: body.total,
+        usuario: body.usuario,
+        habitacion: body.habitacion,
+        servicio: body.servicio
     });
 
-    habitacion.save((err, habitacionGuardado) => {
+    reserva.save((err, reservaGuardado) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
-                mesanje: 'Error al crear habitacion',
+                mesanje: 'Error al crear reserva',
                 errors: err
             });
         }
         res.status(201).json({
             ok: true,
-            habitacion: habitacionGuardado
+            reserva: reservaGuardado
         });
     });
 });
 
 //--------------------------------------------------------
-//Borrar un habitacion por el id
+//Borrar un reserva por el id
 //--------------------------------------------------------
 app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
     var id = req.params.id;
-    Habitacion.findByIdAndRemove(id, (err, habitacionBorrado) => {
+    Reserva.findByIdAndRemove(id, (err, reservaBorrado) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mesanje: 'Error al borrar habitacion',
+                mesanje: 'Error al borrar reserva',
                 errors: err
             });
         }
-        if (!habitacionBorrado) {
+        if (!reservaBorrado) {
             return res.status(400).json({
                 ok: false,
-                mesanje: 'No existe un habitacion con ese id',
-                errors: { message: 'No existe un habitacion con ese id' }
+                mesanje: 'No existe un reserva con ese id',
+                errors: { message: 'No existe un reserva con ese id' }
             });
         }
         res.status(200).json({
             ok: true,
-            habitacion: habitacionBorrado
+            reserva: reservaBorrado
         });
     });
 });

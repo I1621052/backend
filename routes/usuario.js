@@ -88,7 +88,6 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         apellidos: body.apellidos,
         email: body.email,
         password: bcrypt.hashSync(body.password),
-        img: body.img,
         rol: body.rol
     });
 

@@ -19,6 +19,7 @@ var loginRoutes = require('./routes/login');
 var categoriaRoutes = require('./routes/categoria');
 var servicioRoutes = require('./routes/servicio');
 var habitacionRoutes = require('./routes/habitacion');
+var reservaRoutes = require('./routes/reserva');
 
 //Conexion a la base de datos
 mongoose.connection.openUri('mongodb://localhost:27017/DBModIII', (err, res) => {
@@ -30,6 +31,7 @@ app.use('/usuario', usuarioRoutes);
 app.use('/categoria', categoriaRoutes);
 app.use('/servicio', servicioRoutes);
 app.use('/habitacion', habitacionRoutes);
+app.use('/reserva', reservaRoutes);
 app.use('/login', loginRoutes);
 app.use('/', appRoutes);
 
