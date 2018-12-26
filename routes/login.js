@@ -54,12 +54,12 @@ app.post('/google', async(req, res) => {
                     mesanje: 'Debe de usar su autenticacion normal'
                 });
             } else {
-                var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 })
+                var token = jwt.sign({ usuario: usuario }, SEED, { expiresIn: 14400 })
                 res.status(200).json({
                     ok: true,
-                    usuarioBD,
+                    usuario,
                     token,
-                    id: usuarioBD._id
+                    id: usuario._id
                 });
             }
         } else {
@@ -69,13 +69,13 @@ app.post('/google', async(req, res) => {
             usuario.email = googleUser.email;
             usuario.google = true;
             usuario.password = ':)';
-            usuario.save((err, usuarioBD) => {
-                var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 })
+            usuario.save((err, usuario) => {
+                var token = jwt.sign({ usuario: usuario }, SEED, { expiresIn: 14400 })
                 res.status(200).json({
                     ok: true,
-                    usuarioBD,
+                    usuario,
                     token,
-                    id: usuarioBD._id
+                    id: usuario._id
                 });
             });
         }
@@ -92,7 +92,7 @@ app.post('/google', async(req, res) => {
 app.post('/', (req, res) => {
     var body = req.body;
 
-    Usuario.findOne({ email: body.email }, (err, usuarioBD) => {
+    Usuario.findOne({ email: body.email }, (err, usuario) => {
 
         if (err) {
             return res.status(500).json({
@@ -102,7 +102,7 @@ app.post('/', (req, res) => {
             });
         }
 
-        if (!usuarioBD) {
+        if (!usuario) {
             return res.status(400).json({
                 ok: false,
                 mesanje: 'Credenciales incorrectas - email',
@@ -110,7 +110,7 @@ app.post('/', (req, res) => {
             });
         }
 
-        if (!bcrypt.compareSync(body.password, usuarioBD.password)) {
+        if (!bcrypt.compareSync(body.password, usuario.password)) {
             return res.status(400).json({
                 ok: false,
                 mesanje: 'Credenciales incorrectas - password',
@@ -119,15 +119,15 @@ app.post('/', (req, res) => {
         }
 
         //Crear token
-        usuarioBD.password = ':)';
-        var token = jwt.sign({ usuario: usuarioBD }, SEED, { expiresIn: 14400 })
+        usuario.password = ':)';
+        var token = jwt.sign({ usuario: usuario }, SEED, { expiresIn: 14400 })
 
 
         res.status(200).json({
             ok: true,
-            usuarioBD,
+            usuario,
             token,
-            id: usuarioBD._id
+            id: usuario._id
         });
     });
 });
