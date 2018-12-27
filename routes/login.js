@@ -27,6 +27,7 @@ async function verify(token) {
     return {
         nombre: payload.name,
         email: payload.email,
+        img: payload.picture,
         google: true
     }
 }
@@ -39,7 +40,7 @@ app.post('/google', async(req, res) => {
         });
     });
 
-    Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
+    Usuario.findOne({ email: googleUser.email }, (err, usuario) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -47,8 +48,8 @@ app.post('/google', async(req, res) => {
                 errors: err
             });
         }
-        if (usuarioDB) {
-            if (usuarioDB.google === false) {
+        if (usuario) {
+            if (usuario.google === false) {
                 return res.status(400).json({
                     ok: false,
                     mesanje: 'Debe de usar su autenticacion normal'
@@ -67,6 +68,7 @@ app.post('/google', async(req, res) => {
             var usuario = new Usuario();
             usuario.nombre = googleUser.nombre;
             usuario.email = googleUser.email;
+            usuario.img = googleUser.img;
             usuario.google = true;
             usuario.password = ':)';
             usuario.save((err, usuario) => {
