@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var reservaSchema = new Schema({
-    dni: { type: Number, required: [true, 'El dni es necesario'] },
+    dni: { type: String, required: [true, 'El dni es necesario'] },
     nombre: { type: String, required: [true, 'El nombre es necesario'] },
     apellidos: { type: String, required: [true, 'El apellido es necesario'] },
     numero: { type: Number, required: [true, 'El numero es necesario'] },

@@ -28,6 +28,7 @@ var categoriaRoutes = require('./routes/categoria');
 var servicioRoutes = require('./routes/servicio');
 var habitacionRoutes = require('./routes/habitacion');
 var reservaRoutes = require('./routes/reserva');
+var busquedaRoutes = require('./routes/busqueda');
 var uploadRoutes = require('./routes/upload');
 var imagenesRoutes = require('./routes/imagenes');
 
@@ -49,8 +50,10 @@ app.use('/servicio', servicioRoutes);
 app.use('/habitacion', habitacionRoutes);
 app.use('/reserva', reservaRoutes);
 app.use('/login', loginRoutes);
+app.use('/busqueda', busquedaRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/img', imagenesRoutes);
+
 app.use('/', appRoutes);
 
 

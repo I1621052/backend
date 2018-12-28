@@ -11,8 +11,11 @@ var Usuario = require('../models/usuario');
 //Obtener todos los usuarios
 //--------------------------------------------------------
 app.get('/', (req, res, next) => {
-
-    Usuario.find({}, 'nombre apellidos email img rol')
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+    Usuario.find({}, 'nombre apellidos email img rol google')
+        .skip(desde)
+        .limit(5)
         .exec(
             (err, usuarios) => {
                 if (err) {
@@ -22,10 +25,14 @@ app.get('/', (req, res, next) => {
                         errors: err
                     });
                 }
-                res.status(200).json({
-                    ok: true,
-                    usuarios
+                Usuario.count({}, (err, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        usuarios,
+                        total: conteo
+                    });
                 });
+
             });
 });
 
