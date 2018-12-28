@@ -15,7 +15,7 @@ app.get('/', (req, res, next) => {
     desde = Number(desde);
     Usuario.find({}, 'nombre apellidos email img rol google')
         .skip(desde)
-        .limit(5)
+        .limit(10)
         .exec(
             (err, usuarios) => {
                 if (err) {
