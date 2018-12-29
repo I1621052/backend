@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var categoriaSchema = new Schema({
 
     nombre: { type: String, unique: true, required: [true, 'El nombre es necesario'] },
-    detalles: { type: String, required: [true, 'Los apellidos es necesario'] }
+    detalles: { type: String }
 
 }, { collection: 'categorias' });
 

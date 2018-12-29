@@ -10,8 +10,11 @@ var Servicio = require('../models/servicio');
 //Obtener todos los servicios
 //--------------------------------------------------------
 app.get('/', (req, res, next) => {
-
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
     Servicio.find({}, )
+        .skip(desde)
+        .limit(10)
         .exec(
             (err, servicios) => {
                 if (err) {
@@ -21,13 +24,51 @@ app.get('/', (req, res, next) => {
                         errors: err
                     });
                 }
-                res.status(200).json({
-                    ok: true,
-                    servicios
+                Servicio.count({}, (err, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        servicios,
+                        total: conteo
+                    });
                 });
             });
 });
 
+// ========================================== 
+//  Obtener Servicio por ID 
+// ========================================== 
+
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Servicio.findById(id)
+        .exec((err, servicio) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar servicio',
+                    errors: err
+                });
+            }
+
+            if (!servicio) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'El servicio con el id ' + id + ' no existe',
+                    errors: { message: 'No existe un servicio con ese ID' }
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                servicio: servicio
+            });
+
+        })
+
+});
 //--------------------------------------------------------
 //Actualizar servicio
 //--------------------------------------------------------

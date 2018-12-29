@@ -14,7 +14,7 @@ app.get('/', (req, res, next) => {
     desde = Number(desde);
     Habitacion.find({}, )
         .skip(desde)
-        .limit(5)
+        .limit(10)
         .populate('categoria', 'nombre detalles')
         .exec(
             (err, habitaciones) => {
@@ -25,11 +25,51 @@ app.get('/', (req, res, next) => {
                         errors: err
                     });
                 }
-                res.status(200).json({
-                    ok: true,
-                    habitaciones
+                Habitacion.count({}, (err, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        habitaciones,
+                        total: conteo
+                    });
                 });
             });
+});
+
+// ========================================== 
+//  Obtener Habitaciones por ID 
+// ========================================== 
+
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Habitacion.findById(id)
+        .populate('categoria', 'nombre detalles')
+        .exec((err, habitacion) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar habitacion',
+                    errors: err
+                });
+            }
+
+            if (!habitacion) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'La habitacion con el id ' + id + ' no existe',
+                    errors: { message: 'No existe una habitacion con ese ID' }
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                habitacion: habitacion
+            });
+
+        })
+
 });
 
 //--------------------------------------------------------
