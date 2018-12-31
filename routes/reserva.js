@@ -27,11 +27,50 @@ app.get('/', (req, res, next) => {
                         errors: err
                     });
                 }
-                res.status(200).json({
-                    ok: true,
-                    reservas
+                Reserva.count({}, (err, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        reservas,
+                        total: conteo
+                    });
                 });
             });
+});
+
+// ========================================== 
+//  Obtener reserva por ID 
+// ========================================== 
+
+app.get('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Reserva.findById(id)
+        .exec((err, reserva) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar reserva',
+                    errors: err
+                });
+            }
+
+            if (!reserva) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'La reserva con el id ' + id + ' no existe',
+                    errors: { message: 'No existe una reserva con ese ID' }
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                reserva: reserva
+            });
+
+        })
+
 });
 
 //--------------------------------------------------------
@@ -102,7 +141,6 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         fechafin: body.fechafin,
         precio: body.precio,
         total: body.total,
-        usuario: body.usuario,
         habitacion: body.habitacion,
         servicio: body.servicio
     });
@@ -117,7 +155,8 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         }
         res.status(201).json({
             ok: true,
-            reserva: reservaGuardado
+            reserva: reservaGuardado,
+            token: req.usuario
         });
     });
 });

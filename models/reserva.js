@@ -7,9 +7,7 @@ var reservaSchema = new Schema({
     numero: { type: Number, required: [true, 'El numero es necesario'] },
     fechainicio: { type: Date, required: [true, 'La fecha inicio es necesario'] },
     fechafin: { type: Date, required: [true, 'La fecha fin es necesario'] },
-    precio: { type: Number, required: [true, 'El precios es obligatorio'] },
     total: { type: Number, required: [true, 'El total es obligatorio'] },
-    usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
     habitacion: { type: Schema.Types.ObjectId, ref: 'Habitacion', required: [true, 'El idHabitacion es	un campo obligatorio'] },
     servicio: { type: Schema.Types.ObjectId, ref: 'Servicio' },
 });
