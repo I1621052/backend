@@ -6,7 +6,7 @@ app.get('/', (req, res, next) => {
     //404- recurso no encontrado
     res.status(200).json({
         ok: true,
-        mesanje: 'Peticion realizada correctamente'
+        mesanje: 'HOTEL ADAS PALACE'
     });
 });
 module.exports = app;
